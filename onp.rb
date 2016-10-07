@@ -105,9 +105,22 @@ def calc(x,a,b,stack)
 	when '*'
 		stack.push(b*a)
 	when '/'
-		stack.push(b/a)
+		begin
+			res = b / a
+			stack.push(res)
+		rescue ZeroDivisionError
+			zero_error
+		end
 	end
 end
+
+def zero_error
+	puts "Division by zero is impossible!!"
+	print "Hit any key to close..."
+	gets.chomp
+	exit
+end
+
 infix = prep_fun(input_array)
 #puts infix.inspect #control printout of infix prep
 postfix = infix_to_postfix(infix)
@@ -116,3 +129,4 @@ result = calculate_postix(postfix)
 puts "The answer is #{result}" 
 print "Hit any key to close..."
 gets.chomp
+
