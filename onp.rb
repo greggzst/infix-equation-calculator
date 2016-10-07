@@ -1,4 +1,5 @@
-puts "Type an equation, hit return and it will be calculated for you:"
+puts "Type an equation, hit return and it will be calculated for you!"
+puts "You can use bracket and +, -,*,/ operations:"
 input_array = gets.chomp.split('')
 
 #prep_fun does preparation like linking numbers that contain more digits
@@ -113,3 +114,5 @@ postfix = infix_to_postfix(infix)
 #puts postfix.inspect #control printout of postfix
 result = calculate_postix(postfix)
 puts "The answer is #{result}" 
+print "Hit any key to close..."
+gets.chomp
