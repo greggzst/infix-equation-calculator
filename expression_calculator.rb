@@ -6,7 +6,20 @@ class ExpressionCalculator
 
 
   def initialize(expression)
-    @postif_expression = convert_expression_to_postfix(expression)
+    @postfix_array = convert_expression_to_postfix(expression)
+  end
+
+  def calculate
+    stack = []
+
+    @postfix_array.each do |elem|
+      if elem =~ /\d/
+        stack << elem.to_i
+      else
+        perform_operation(stack, elem)
+      end
+    end
+    stack.pop
   end
 
   class ExpresionBracketsError < StandardError
@@ -36,7 +49,7 @@ class ExpressionCalculator
         when /\(/
           operators_stack << token
         when /\)/
-          while operators_stack.last != ')'
+          while operators_stack.last != '('
             output << operators_stack.pop
           end
           operators_stack.pop
@@ -69,17 +82,44 @@ class ExpressionCalculator
       case operator
       when '^'
         RIGHT
-      when 'x', '/', '+', '-'
+      when '*', '/', '+', '-'
         LEFT
       end
     end
 
     def pop_condition(operator, stack)
-      !stack.empty? && operator_priority(operator) < operator_priority(stack.last) ||
-        (operator_priority(operator) == operator_priority(stack.last) &&
-          operator_associativity(operator) == LEFT) && stack.last != '('
+      !stack.empty? && stack.last != '(' && operator_priority(operator) <= operator_priority(stack.last) &&
+        operator_associativity(operator) == LEFT
 
     end
-end
 
-ExpressionCalculator.new('1+2-4+15')
+    def perform_operation(stack, operator)
+      a = stack.pop
+      b = stack.pop
+
+      case operator
+      when '^'
+        stack << b ** a
+      when '*'
+        stack << b * a
+      when '/'
+        begin
+          res = b / a
+          stack << res
+        rescue ZeroDivisionError
+          zero_division_error_messages
+        end
+      when '+'
+        stack << b + a
+      when '-'
+        stack << b - a
+      end
+    end
+
+    def zero_division_error_messages
+      puts 'Found division by 0 which is illegal'
+      print "Hit any key to close..."
+      gets.chomp
+      exit
+    end
+end
