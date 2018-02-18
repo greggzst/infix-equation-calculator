@@ -107,19 +107,12 @@ class ExpressionCalculator
           res = b / a
           stack << res
         rescue ZeroDivisionError
-          zero_division_error_messages
+          return nil
         end
       when '+'
         stack << b + a
       when '-'
         stack << b - a
       end
-    end
-
-    def zero_division_error_messages
-      puts 'Found division by 0 which is illegal'
-      print "Hit any key to close..."
-      gets.chomp
-      exit
     end
 end
