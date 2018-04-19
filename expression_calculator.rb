@@ -22,15 +22,11 @@ class ExpressionCalculator
     stack.pop
   end
 
-  class ExpresionBracketsError < StandardError
-    def initialize
-      super("Brackets don't match!")
-    end
-  end
+  ExpresionBracketsError = Class.new(StandardError)
 
   private
     def convert_expression_to_postfix(expression)
-      raise ExpresionBracketsError.new unless brackets_ok?(expression)
+      raise ExpresionBracketsError unless brackets_ok?(expression)
 
       operators_stack = []
       output = []
